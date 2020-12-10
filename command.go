@@ -645,6 +645,27 @@ func (c *Client) BytesHGET(key, field []byte) (value []byte, err error) {
 	return c.commandBlobBytes(r)
 }
 
+// HKEYS executes <https://redis.io/commands/hkeys>.
+func (c *Client) HKEYS(key string) (values [][]byte, err error) {
+	r := newRequest("*2\r\n$5\r\nHKEYS\r\n$")
+	r.addString(key)
+	return c.commandBytesArray(r)
+}
+
+// HKEYSString executes <https://redis.io/commands/hkeys>.
+func (c *Client) HKEYSString(key string) (values []string, err error) {
+	r := newRequest("*2\r\n$5\r\nHKEYS\r\n$")
+	r.addString(key)
+	return c.commandStringArray(r)
+}
+
+// BytesHKEYS executes <https://redis.io/commands/hkeys>.
+func (c *Client) BytesHKEYS(key []byte) (values [][]byte, err error) {
+	r := newRequest("*2\r\n$5\r\nHKEYS\r\n$")
+	r.addBytes(key)
+	return c.commandBytesArray(r)
+}
+
 // HSET executes <https://redis.io/commands/hset>.
 func (c *Client) HSET(key, field string, value []byte) (newField bool, err error) {
 	r := newRequest("*4\r\n$4\r\nHSET\r\n$")

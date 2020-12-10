@@ -536,6 +536,12 @@ func TestHashCRUD(t *testing.T) {
 		t.Errorf(`HGET %q %q got %q, want %q`, key, field, bytes, value)
 	}
 
+	if array, err := testClient.HKEYS(key); err != nil {
+		t.Errorf("HKEYS %q %q error: %s", key, field, err)
+	} else if len(array) != 1 || string(array[0]) != field {
+		t.Errorf(`HKEYS %q got %q, want %q`, key, array[0], field)
+	}
+
 	if newField, err := testClient.HSETString(key, field, update); err != nil {
 		t.Errorf("HSET %q %q %q update error: %s", key, field, update, err)
 	} else {
@@ -572,6 +578,12 @@ func TestBytesHashCRUD(t *testing.T) {
 		t.Errorf("HGET %q %q error: %s", key, field, err)
 	} else if !reflect.DeepEqual(bytes, value) {
 		t.Errorf(`HGET %q %q got %q, want %q`, key, field, bytes, value)
+	}
+
+	if array, err := testClient.BytesHKEYS(key); err != nil {
+		t.Errorf("HKEYS %q %q error: %s", key, field, err)
+	} else if len(array) != 1 || !reflect.DeepEqual(array[0], field) {
+		t.Errorf(`HKEYS %q got %q, want %q`, key, array[0], field)
 	}
 
 	if newField, err := testClient.BytesHSET(key, field, update); err != nil {
