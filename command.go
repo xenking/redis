@@ -773,3 +773,123 @@ func (c *Client) HMSETString(key string, fields, values []string) error {
 	}
 	return c.commandOK(r)
 }
+
+// ZADD executes <https://redis.io/commands/zadd>.
+func (c *Client) ZADD(key string, score int64, value []byte) (bool, error) {
+	r := newRequest("*4\r\n$4\r\nZADD\r\n$")
+	r.addStringIntBytes(key, score, value)
+	created, err := c.commandInteger(r)
+	return created != 0, err
+}
+
+// BytesZADD executes <https://redis.io/commands/zadd>.
+func (c *Client) BytesZADD(key []byte, score int64, value []byte) (bool, error) {
+	r := newRequest("*4\r\n$4\r\nZADD\r\n$")
+	r.addBytesIntBytes(key, score, value)
+	created, err := c.commandInteger(r)
+	return created != 0, err
+}
+
+// ZADDString executes <https://redis.io/commands/zadd>.
+func (c *Client) ZADDString(key string, score int64, value string) (bool, error) {
+	r := newRequest("*4\r\n$4\r\nZADD\r\n$")
+	r.addStringIntString(key, score, value)
+	created, err := c.commandInteger(r)
+	return created != 0, err
+}
+
+// ZADD executes <https://redis.io/commands/zadd>.
+func (c *Client) ZADDArgs(key string, scores []int64, values [][]byte) (int64, error) {
+	r := newRequestSize(2+len(scores)*2, "\r\n$4\r\nZADD\r\n$")
+	err := r.addStringIntBytesMapLists(key, scores, values)
+	if err != nil {
+		return 0, err
+	}
+	return c.commandInteger(r)
+}
+
+// BytesZADD executes <https://redis.io/commands/zadd>.
+func (c *Client) BytesZADDArgs(key []byte, scores []int64, values [][]byte) (int64, error) {
+	r := newRequestSize(2+len(scores)*2, "\r\n$4\r\nZADD\r\n$")
+	err := r.addBytesIntBytesMapLists(key, scores, values)
+	if err != nil {
+		return 0, err
+	}
+	return c.commandInteger(r)
+}
+
+// ZADDString executes <https://redis.io/commands/zadd>.
+func (c *Client) ZADDStringArgs(key string, scores []int64, values []string) (int64, error) {
+	r := newRequestSize(2+len(scores)*2, "\r\n$4\r\nZADD\r\n$")
+	err := r.addStringIntStringMapLists(key, scores, values)
+	if err != nil {
+		return 0, err
+	}
+	return c.commandInteger(r)
+}
+
+// ZRANGE executes <https://redis.io/commands/zrange>.
+func (c *Client) ZRANGE(key string, start, stop int64) ([][]byte, error) {
+	r := newRequest("*4\r\n$6\r\nZRANGE\r\n$")
+	r.addStringIntInt(key, start, stop)
+	return c.commandBytesArray(r)
+}
+
+// BytesZRANGE executes <https://redis.io/commands/zrange>.
+func (c *Client) BytesZRANGE(key []byte, start, stop int64) ([][]byte, error) {
+	r := newRequest("*4\r\n$6\r\nZRANGE\r\n$")
+	r.addBytesIntInt(key, start, stop)
+	return c.commandBytesArray(r)
+}
+
+// ZRANGEString executes <https://redis.io/commands/zrange>.
+func (c *Client) ZRANGEString(key string, start, stop int64) ([]string, error) {
+	r := newRequest("*4\r\n$6\r\nZRANGE\r\n$")
+	r.addStringIntInt(key, start, stop)
+	return c.commandStringArray(r)
+}
+
+// ZREM executes <https://redis.io/commands/zrem>.
+func (c *Client) ZREM(key string, member []byte) (bool, error) {
+	r := newRequest("*3\r\n$4\r\nZREM\r\n$")
+	r.addStringBytes(key, member)
+	removed, err := c.commandInteger(r)
+	return removed != 0, err
+}
+
+// ZREMString executes <https://redis.io/commands/zrem>.
+func (c *Client) ZREMString(key, member string) (bool, error) {
+	r := newRequest("*3\r\n$4\r\nZREM\r\n$")
+	r.addStringString(key, member)
+	removed, err := c.commandInteger(r)
+	return removed != 0, err
+}
+
+// BytesZREM executes <https://redis.io/commands/zrem>.
+func (c *Client) BytesZREM(key, member []byte) (bool, error) {
+	r := newRequest("*3\r\n$4\r\nZREM\r\n$")
+	r.addBytesBytes(key, member)
+	removed, err := c.commandInteger(r)
+	return removed != 0, err
+}
+
+// ZREM executes <https://redis.io/commands/zrem>.
+func (c *Client) ZREMArgs(key string, members [][]byte) (int64, error) {
+	r := newRequestSize(2+len(members)*2,"*3\r\n$4\r\nZREM\r\n$")
+	r.addStringBytesList(key, members)
+	return c.commandInteger(r)
+}
+
+// ZREMString executes <https://redis.io/commands/zrem>.
+func (c *Client) ZREMStringArgs(key string, members []string) (int64, error) {
+	r := newRequestSize(2+len(members)*2,"*3\r\n$4\r\nZREM\r\n$")
+	r.addStringStringList(key, members)
+	return c.commandInteger(r)
+}
+
+// BytesZREM executes <https://redis.io/commands/zrem>.
+func (c *Client) BytesZREMArgs(key []byte, members [][]byte) (int64, error) {
+	r := newRequestSize(2+len(members)*2,"*3\r\n$4\r\nZREM\r\n$")
+	r.addBytesBytesList(key, members)
+	return c.commandInteger(r)
+}

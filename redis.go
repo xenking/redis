@@ -652,6 +652,22 @@ func (r *request) addBytesIntInt(a1 []byte, a2, a3 int64) {
 	r.buf = append(r.buf, '\r', '\n')
 }
 
+func (r *request) addBytesIntBytesMapLists(a1 []byte, a2 []int64, a3 [][]byte) error {
+	if len(a2) != len(a3) {
+		return errMapSlices
+	}
+	r.bytes(a1)
+	for i, key := range a2 {
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.decimal(key)
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.bytes(a3[i])
+	}
+	r.buf = append(r.buf, '\r', '\n')
+	return nil
+}
+
+
 func (r *request) addStringBytesStringList(a1 string, a2 []byte, a3 []string) {
 	r.string(a1)
 	r.buf = append(r.buf, '\r', '\n', '$')
@@ -711,6 +727,15 @@ func (r *request) addStringStringStringList(a1, a2 string, a3 []string) {
 	r.buf = append(r.buf, '\r', '\n')
 }
 
+func (r *request) addStringBytesList(a1 string, a2 [][]byte) {
+	r.string(a1)
+	for _, key := range a2 {
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.bytes(key)
+	}
+	r.buf = append(r.buf, '\r', '\n')
+}
+
 func (r *request) addStringStringBytesMapLists(a1 string, a2 []string, a3 [][]byte) error {
 	if len(a2) != len(a3) {
 		return errMapSlices
@@ -726,6 +751,21 @@ func (r *request) addStringStringBytesMapLists(a1 string, a2 []string, a3 [][]by
 	return nil
 }
 
+func (r *request) addStringIntBytesMapLists(a1 string, a2 []int64, a3 [][]byte) error {
+	if len(a2) != len(a3) {
+		return errMapSlices
+	}
+	r.string(a1)
+	for i, key := range a2 {
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.decimal(key)
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.bytes(a3[i])
+	}
+	r.buf = append(r.buf, '\r', '\n')
+	return nil
+}
+
 func (r *request) addStringStringStringMapLists(a1 string, a2, a3 []string) error {
 	if len(a2) != len(a3) {
 		return errMapSlices
@@ -734,6 +774,21 @@ func (r *request) addStringStringStringMapLists(a1 string, a2, a3 []string) erro
 	for i, key := range a2 {
 		r.buf = append(r.buf, '\r', '\n', '$')
 		r.string(key)
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.string(a3[i])
+	}
+	r.buf = append(r.buf, '\r', '\n')
+	return nil
+}
+
+func (r *request) addStringIntStringMapLists(a1 string, a2 []int64, a3 []string) error {
+	if len(a2) != len(a3) {
+		return errMapSlices
+	}
+	r.string(a1)
+	for i, key := range a2 {
+		r.buf = append(r.buf, '\r', '\n', '$')
+		r.decimal(key)
 		r.buf = append(r.buf, '\r', '\n', '$')
 		r.string(a3[i])
 	}

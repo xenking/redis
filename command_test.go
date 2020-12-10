@@ -713,3 +713,40 @@ func TestHashAbsent(t *testing.T) {
 		t.Errorf("HDEL %q got true, want false", key)
 	}
 }
+
+func TestSortedSetStringCRUD(t *testing.T) {
+	t.Parallel()
+	key := randomKey("test-zset")
+	const score, member, update = 1, "first-member", "second-member"
+
+	if ok, err := testClient.ZADDString(key, score, member); err != nil {
+		t.Fatalf("ZADD %q %q %q error: %s", key, score, member, err)
+	} else if !ok {
+		t.Errorf("ZADD %q %q %q, want true got false", key, score, member)
+	}
+
+	if array, err := testClient.ZRANGEString(key, 0, -1); err != nil {
+		t.Errorf("ZRANGE %q error: %s", key, err)
+	} else if len(array) != 1 || array[0] != member {
+		t.Errorf(`ZRANGE %q got %q, want %q`, key, array[0], member)
+	}
+
+	if ok, err := testClient.ZADDString(key, score, update); err != nil {
+		t.Errorf("ZADDString %q %q %q update error: %s", key, score, update, err)
+	} else if !ok {
+		t.Errorf("ZADDString %q %q %q update want false, got true", key, score, update)
+	}
+
+	ok, err := testClient.ZREMString(key, member)
+	if err != nil {
+		t.Errorf("ZREMString %q %q error: %s", key, member, err)
+	} else if !ok {
+		t.Errorf("ZREMString %q %q got false, want true", key, member)
+	}
+
+	if array, err := testClient.ZRANGEString(key, 0, -1); err != nil {
+		t.Errorf("ZRANGE %q error: %s", key, err)
+	} else if len(array) != 1 || array[0] != update {
+		t.Errorf(`ZRANGE %q got %q, want %q`, key, array[0], update)
+	}
+}
