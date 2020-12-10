@@ -1,6 +1,6 @@
-[![API Documentation](https://godoc.org/github.com/pascaldekloe/redis?status.svg)](https://godoc.org/github.com/pascaldekloe/redis)
-[![Build Status](https://circleci.com/gh/pascaldekloe/redis.svg?style=svg)](https://circleci.com/gh/pascaldekloe/redis)
-[![Code Report](https://goreportcard.com/badge/github.com/pascaldekloe/redis)](https://goreportcard.com/report/github.com/pascaldekloe/redis)
+[![API Documentation](https://godoc.org/github.com/xenking/redis?status.svg)](https://godoc.org/github.com/xenking/redis)
+[![Build Status](https://circleci.com/gh/xenking/redis.svg?style=svg)](https://circleci.com/gh/xenking/redis)
+[![Code Report](https://goreportcard.com/badge/github.com/xenking/redis)](https://goreportcard.com/report/github.com/xenking/redis)
 
 ## About
 
@@ -14,7 +14,7 @@ language.
 * Robust error recovery
 
 Network I/O is executed in the same goroutine that invoked the 
-[Client](https://godoc.org/github.com/pascaldekloe/redis#Client).
+[Client](https://godoc.org/github.com/xenking/redis#Client).
 There is no internal error reporting/logging by design.
 
 This is free and unencumbered software released into the

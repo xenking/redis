@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/golang:1.13.1
       - image: circleci/redis:4.0.14
-    working_directory: /go/src/github.com/pascaldekloe/redis
+    working_directory: /go/src/github.com/xenking/redis
     steps:
       - checkout
       - run:

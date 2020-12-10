@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pascaldekloe/redis"
+	"github.com/xenking/redis"
 )
 
 var (

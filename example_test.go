@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/pascaldekloe/redis"
+	"github.com/xenking/redis"
 )
 
 func ExampleClient_SETStringWithOptions() {
