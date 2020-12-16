@@ -698,6 +698,13 @@ func (c *Client) HDEL(key, field string) (bool, error) {
 	return removed != 0, err
 }
 
+// HLEN executes <https://redis.io/commands/hlen>.
+func (c *Client) HLEN(key string) (int64, error) {
+	r := newRequest("*2\r\n$4\r\nHLEN\r\n$")
+	r.addString(key)
+	return c.commandInteger(r)
+}
+
 // HDELArgs executes <https://redis.io/commands/hdel>.
 func (c *Client) HDELArgs(key string, fields ...string) (int64, error) {
 	r := newRequestSize(2+len(fields), "\r\n$4\r\nHDEL\r\n$")

@@ -537,9 +537,15 @@ func TestHashCRUD(t *testing.T) {
 	}
 
 	if array, err := testClient.HKEYS(key); err != nil {
-		t.Errorf("HKEYS %q %q error: %s", key, field, err)
+		t.Errorf("HKEYS %q error: %s", key, err)
 	} else if len(array) != 1 || string(array[0]) != field {
 		t.Errorf(`HKEYS %q got %q, want %q`, key, array[0], field)
+	}
+
+	if length, err :=testClient.HLEN(key); err != nil {
+		t.Errorf("HLEN %q error: %s", key,  err)
+	} else if length != 1 {
+		t.Errorf(`HLEN %q got %q, want %q`, key, length, 1)
 	}
 
 	if newField, err := testClient.HSETString(key, field, update); err != nil {
